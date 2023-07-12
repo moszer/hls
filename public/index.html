@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Download Progress</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+  <input type="text" id="urlInput" placeholder="Paste video URL">
+  <button id="downloadButton">Download</button>
+  <div id="progress"></div>
+
+  <script>
+    $(document).ready(() => {
+      $('#downloadButton').click(() => {
+        const videoUrl = $('#urlInput').val();
+
+        // Make an AJAX POST request to start the download process
+        $.post('/download', { videoUrl: videoUrl })
+          .done(() => {
+            $('#progress').text('Download completed.');
+          })
+          .fail(() => {
+            $('#progress').text('Error downloading the video.');
+          });
+      });
+
+      // Continuously update the progress by making AJAX GET requests
+      setInterval(() => {
+        $.get('/progress')
+          .done((data) => {
+            $('#progress').text(data);
+          })
+          .fail(() => {
+            $('#progress').text('Error getting progress.');
+          });
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
