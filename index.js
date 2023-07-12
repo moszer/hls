@@ -16,7 +16,7 @@ app.post('/download', (req, res) => {
 
   ffmpeg.setFfmpegPath(require('@ffmpeg-installer/ffmpeg').path);
 
-  const outputDir = './output/';
+  const outputDir = './';
   const outputFilename = 'output.mp4';
 
   const proc = ffmpeg(videoUrl)
