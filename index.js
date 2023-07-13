@@ -1,14 +1,15 @@
 const express = require('express');
 const ffmpeg = require('fluent-ffmpeg');
+const path = require('path');
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 let downloadProgress = '0%';
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.post('/download', (req, res) => {
@@ -21,7 +22,7 @@ app.post('/download', (req, res) => {
 
   const proc = ffmpeg(videoUrl)
     .outputOptions('-c', 'copy')
-    .output(outputDir + outputFilename)
+    .output(path.join(outputDir, outputFilename))
     .on('progress', (progress) => {
       const percent = Math.floor(progress.percent);
       downloadProgress = `Download progress: ${percent}%`;
